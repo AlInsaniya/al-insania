@@ -136,6 +136,7 @@ body::after {
   position: relative;
   animation: rise 0.6s 0.1s ease both;
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  overflow: hidden;
 }
 
 @keyframes rise {
@@ -611,7 +612,7 @@ textarea { resize: none; min-height: 80px; line-height: 1.6; }
     <div class="format-cards">
       <div class="fmt-card">
         <input type="radio" name="type" id="type-trial" value="Пробный урок">
-        <label for="type-trial"><span class="f-icon">✨</span> Пробный урок</label>
+        <label for="type-trial"><span class="f-icon">✨</span> Пробный&nbsp;урок</label>
       </div>
       <div class="fmt-card">
         <input type="radio" name="type" id="type-course" value="Курс">
@@ -651,17 +652,8 @@ textarea { resize: none; min-height: 80px; line-height: 1.6; }
 </div>
 
 <script>
-const TG_TOKEN = '8890605862:AAFOCGRIuka5hc0H891f0UzvqpfhhzFeE2c';
-const TG_CHAT  = '8201023640';
-
 async function sendToTelegram(text) {
-  try {
-    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: 'HTML' })
-    });
-  } catch(e) { console.error('TG error', e); }
+  // Telegram интеграция отключена для презентации
 }
 
 let current = 1;
