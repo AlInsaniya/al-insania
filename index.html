@@ -617,7 +617,7 @@ textarea { resize: none; min-height: 80px; line-height: 1.6; }
   </div>
 
   <p class="error-msg" id="err-2">Пожалуйста, укажите имя</p>
-  <p class="error-msg" id="err-phone">Введите полный номер телефона</p>
+  <p class="error-msg" id="err-phone">Введите корректный номер телефона (10–11 цифр)</p>
   <div class="btn-row">
     <button class="btn-back" onclick="goTo(1)">←</button>
     <button class="btn-next" onclick="goTo(3)">Далее →</button>
@@ -684,7 +684,13 @@ textarea { resize: none; min-height: 80px; line-height: 1.6; }
 
 <script>
 async function sendToTelegram(text) {
-  // Telegram интеграция отключена для презентации
+  try {
+    await fetch('/.netlify/functions/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    });
+  } catch(e) { console.error('Send error', e); }
 }
 
 let captchaAnswer = 0;
@@ -739,7 +745,8 @@ function goTo(n) {
     let ok = true;
     if (!name) { document.getElementById('err-2').style.display = 'block'; ok = false; }
     else document.getElementById('err-2').style.display = 'none';
-    if (phone.replace(/\D/g, '').length < 10) { document.getElementById('err-phone').style.display = 'block'; ok = false; }
+    const phoneDigits = phone.replace(/\D/g, '').length;
+    if (phoneDigits < 10 || phoneDigits > 11) { document.getElementById('err-phone').style.display = 'block'; ok = false; }
     else document.getElementById('err-phone').style.display = 'none';
     if (!ok) return;
   }
