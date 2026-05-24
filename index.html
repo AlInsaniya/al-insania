@@ -136,7 +136,6 @@ body::after {
   position: relative;
   animation: rise 0.6s 0.1s ease both;
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  overflow: hidden;
 }
 
 @keyframes rise {
@@ -602,7 +601,7 @@ textarea { resize: none; min-height: 80px; line-height: 1.6; }
   </div>
   <div class="field">
     <label for="phone">Номер телефона</label>
-    <input type="tel" id="phone" placeholder="+7 (___) ___-__-__">
+    <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" oninput="phoneMask(this)" maxlength="18">
   </div>
   <div class="field">
     <label for="age">Возраст <span style="letter-spacing:0;font-weight:300;text-transform:none">(необязательно)</span></label>
@@ -616,7 +615,8 @@ textarea { resize: none; min-height: 80px; line-height: 1.6; }
     </select>
   </div>
 
-  <p class="error-msg" id="err-2">Пожалуйста, укажите имя и телефон</p>
+  <p class="error-msg" id="err-2">Пожалуйста, укажите имя</p>
+  <p class="error-msg" id="err-phone">Введите полный номер телефона</p>
   <div class="btn-row">
     <button class="btn-back" onclick="goTo(1)">←</button>
     <button class="btn-next" onclick="goTo(3)">Далее →</button>
@@ -689,6 +689,21 @@ async function sendToTelegram(text) {
 let captchaAnswer = 0;
 let current = 1;
 
+function phoneMask(input) {
+  let v = input.value.replace(/\D/g, '');
+  if (v.startsWith('8')) v = '7' + v.slice(1);
+  if (!v.startsWith('7')) v = '7' + v;
+  v = v.slice(0, 11);
+  let out = '+7';
+  if (v.length > 1) out += ' (' + v.slice(1, 4);
+  if (v.length >= 4) out += ') ' + v.slice(4, 7);
+  if (v.length >= 7) out += '-' + v.slice(7, 9);
+  if (v.length >= 9) out += '-' + v.slice(9, 11);
+  input.value = out;
+}
+
+
+
 function generateCaptcha() {
   const a = Math.floor(Math.random() * 9) + 1;
   const b = Math.floor(Math.random() * 9) + 1;
@@ -711,8 +726,12 @@ function goTo(n) {
   if (n > 2 && current === 2) {
     const name  = document.getElementById('name').value.trim();
     const phone = document.getElementById('phone').value.trim();
-    if (!name || !phone) { document.getElementById('err-2').style.display = 'block'; return; }
-    document.getElementById('err-2').style.display = 'none';
+    let ok = true;
+    if (!name) { document.getElementById('err-2').style.display = 'block'; ok = false; }
+    else document.getElementById('err-2').style.display = 'none';
+    if (phone.length < 18) { document.getElementById('err-phone').style.display = 'block'; ok = false; }
+    else document.getElementById('err-phone').style.display = 'none';
+    if (!ok) return;
   }
   document.getElementById('step-' + current).classList.remove('active');
   current = n;
