@@ -1,2 +1,757 @@
-# al-insania
-Linguistic Centre
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аль-Инсания — Запись на курс</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { background: #0d1117; }
+
+:root {
+–bg: #0d1117;
+–surface: #161c26;
+–surface2: #1e2635;
+–border: rgba(255,255,255,0.08);
+–border-gold: rgba(196,160,100,0.5);
+–gold: #c4a064;
+–gold2: #e8c97a;
+–text: #e8e2d6;
+–muted: #7a8494;
+–accent-ar: #4a8fa8;
+–accent-en: #7a9e6e;
+–serif: ‘Cormorant Garamond’, Georgia, ‘Times New Roman’, serif;
+–sans: ‘Rubik’, -apple-system, sans-serif;
+}
+
+body {
+min-height: 100vh;
+background: var(–bg);
+font-family: var(–sans);
+color: var(–text);
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 40px 16px;
+position: relative;
+overflow-x: hidden;
+}
+
+body::before {
+content: ‘’;
+position: fixed;
+inset: 0;
+opacity: 0.035;
+background-image:
+repeating-linear-gradient(60deg, var(–gold) 0, var(–gold) 1px, transparent 0, transparent 50%),
+repeating-linear-gradient(-60deg, var(–gold) 0, var(–gold) 1px, transparent 0, transparent 50%);
+background-size: 40px 70px;
+pointer-events: none;
+}
+
+body::after {
+content: ‘’;
+position: fixed;
+top: -200px; right: -200px;
+width: 600px; height: 600px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(196,160,100,0.05) 0%, transparent 70%);
+pointer-events: none;
+}
+
+.wrap {
+width: 100%;
+max-width: 520px;
+position: relative;
+z-index: 1;
+}
+
+/* Header */
+.header {
+text-align: center;
+margin-bottom: 28px;
+animation: rise 0.6s ease both;
+}
+
+.arabic-title {
+font-family: var(–serif);
+font-size: 46px;
+font-style: italic;
+color: var(–gold);
+line-height: 1;
+margin-bottom: 10px;
+text-shadow: 0 0 40px rgba(196,160,100,0.25);
+}
+
+.center-sub {
+font-size: 12px;
+font-weight: 400;
+letter-spacing: 0.2em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 4px;
+}
+
+.center-main {
+font-family: var(–serif);
+font-size: clamp(26px, 7vw, 40px);
+font-weight: 600;
+color: var(–gold);
+line-height: 1.1;
+margin-bottom: 8px;
+white-space: nowrap;
+}
+
+.tagline {
+font-family: var(–serif);
+font-size: 15px;
+font-style: italic;
+color: rgba(232,226,214,0.4);
+}
+
+.ornament {
+display: flex;
+align-items: center;
+gap: 12px;
+margin: 18px 0 24px;
+opacity: 0.35;
+}
+.ornament::before, .ornament::after {
+content: ‘’;
+flex: 1;
+height: 1px;
+background: linear-gradient(to right, transparent, var(–gold), transparent);
+}
+.ornament span { color: var(–gold); font-size: 16px; }
+
+/* Card */
+.card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 4px;
+padding: 36px 28px;
+position: relative;
+animation: rise 0.6s 0.1s ease both;
+box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+@keyframes rise {
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: linear-gradient(to right, transparent, var(–gold), transparent);
+border-radius: 4px 4px 0 0;
+}
+
+/* Steps dots */
+.steps {
+display: flex;
+gap: 6px;
+margin-bottom: 28px;
+}
+.step-dot {
+flex: 1;
+height: 2px;
+background: var(–border);
+border-radius: 2px;
+transition: background 0.4s;
+}
+.step-dot.active { background: var(–gold); }
+.step-dot.done { background: rgba(196,160,100,0.3); }
+
+.step-title {
+font-family: var(–serif);
+font-size: 24px;
+font-weight: 400;
+margin-bottom: 4px;
+line-height: 1.3;
+color: var(–text);
+}
+.step-sub {
+font-size: 13px;
+color: var(–muted);
+margin-bottom: 24px;
+font-weight: 300;
+}
+
+/* Field */
+.field { margin-bottom: 18px; }
+
+label {
+display: block;
+font-size: 10px;
+font-weight: 500;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 7px;
+}
+
+input, select, textarea {
+width: 100%;
+padding: 12px 14px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 3px;
+color: var(–text);
+font-family: var(–sans);
+font-size: 15px;
+font-weight: 300;
+outline: none;
+transition: border-color 0.2s, box-shadow 0.2s;
+appearance: none;
+-webkit-appearance: none;
+}
+
+input::placeholder, textarea::placeholder { color: rgba(122,132,148,0.5); }
+
+input:focus, select:focus, textarea:focus {
+border-color: var(–border-gold);
+box-shadow: 0 0 0 3px rgba(196,160,100,0.08);
+}
+
+select {
+background-image: url(“data:image/svg+xml,%3Csvg xmlns=‘http://www.w3.org/2000/svg’ width=‘11’ height=‘6’%3E%3Cpath d=‘M1 1l4.5 4L10 1’ stroke=’%23c4a064’ stroke-width=‘1.5’ fill=‘none’ stroke-linecap=‘round’/%3E%3C/svg%3E”);
+background-repeat: no-repeat;
+background-position: right 14px center;
+padding-right: 36px;
+cursor: pointer;
+}
+
+select option { background: #1e2635; color: var(–text); }
+textarea { resize: none; min-height: 80px; line-height: 1.6; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Language cards */
+.lang-cards {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+margin-bottom: 18px;
+}
+
+.lang-card input, .lvl-card input, .fmt-card input { display: none; }
+
+.lang-card label {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+padding: 20px 12px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 3px;
+cursor: pointer;
+text-transform: none;
+letter-spacing: 0;
+font-size: 14px;
+color: var(–muted);
+transition: all 0.2s;
+text-align: center;
+gap: 8px;
+}
+
+.lang-card label .emoji { font-size: 26px; }
+.lang-card label .l-name { font-family: var(–serif); font-size: 17px; color: var(–text); font-weight: 600; }
+.lang-card label .l-sub { font-size: 12px; color: var(–muted); }
+
+.lang-card.arabic input:checked + label {
+border-color: var(–accent-ar);
+background: rgba(74,143,168,0.08);
+box-shadow: 0 0 0 3px rgba(74,143,168,0.1);
+}
+
+.lang-card.english input:checked + label {
+border-color: var(–accent-en);
+background: rgba(122,158,110,0.08);
+box-shadow: 0 0 0 3px rgba(122,158,110,0.1);
+}
+
+/* Level cards */
+.level-cards {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 8px;
+margin-bottom: 18px;
+}
+
+.lvl-card label {
+display: flex;
+flex-direction: column;
+padding: 12px 14px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 3px;
+cursor: pointer;
+text-transform: none;
+letter-spacing: 0;
+font-size: 14px;
+color: var(–text);
+font-weight: 400;
+transition: all 0.2s;
+gap: 2px;
+}
+
+.lvl-card label .lvl-tag {
+font-size: 9px;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(–gold);
+font-weight: 500;
+}
+
+.lvl-card input:checked + label {
+border-color: var(–border-gold);
+background: rgba(196,160,100,0.07);
+box-shadow: 0 0 0 3px rgba(196,160,100,0.07);
+}
+
+/* Format cards */
+.format-cards {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 8px;
+margin-bottom: 18px;
+}
+
+.fmt-card label {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 13px 14px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 3px;
+cursor: pointer;
+font-size: 14px;
+color: var(–text);
+font-weight: 300;
+text-transform: none;
+letter-spacing: 0;
+transition: all 0.2s;
+}
+
+.fmt-card label .f-icon { font-size: 18px; }
+
+.fmt-card input:checked + label {
+border-color: var(–border-gold);
+background: rgba(196,160,100,0.07);
+box-shadow: 0 0 0 3px rgba(196,160,100,0.07);
+}
+
+/* Buttons */
+.btn-row {
+display: flex;
+gap: 10px;
+margin-top: 24px;
+}
+
+.btn-back {
+padding: 13px 18px;
+background: transparent;
+border: 1px solid var(–border);
+border-radius: 3px;
+color: var(–muted);
+font-family: var(–sans);
+font-size: 13px;
+cursor: pointer;
+transition: all 0.2s;
+flex-shrink: 0;
+}
+.btn-back:hover { border-color: rgba(255,255,255,0.15); color: var(–text); }
+
+.btn-next {
+flex: 1;
+padding: 14px;
+background: var(–gold);
+border: none;
+border-radius: 3px;
+color: #0d1117;
+font-family: var(–sans);
+font-size: 13px;
+font-weight: 500;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+cursor: pointer;
+transition: all 0.2s;
+}
+.btn-next:hover { background: var(–gold2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(196,160,100,0.25); }
+.btn-next:active { transform: none; }
+.btn-next:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Steps */
+.step { display: none; }
+.step.active { display: block; animation: rise 0.35s ease both; }
+
+.error-msg {
+display: none;
+font-size: 12px;
+color: #e07070;
+margin-top: 10px;
+text-align: center;
+}
+
+/* Success */
+.success-wrap { text-align: center; padding: 8px 0; }
+
+.success-ring {
+width: 68px; height: 68px;
+border: 1.5px solid var(–gold);
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+margin: 0 auto 24px;
+font-size: 28px;
+position: relative;
+}
+.success-ring::before {
+content: ‘’;
+position: absolute;
+inset: 6px;
+border: 1px solid rgba(196,160,100,0.2);
+border-radius: 50%;
+}
+
+.success-wrap h2 {
+font-family: var(–serif);
+font-size: 28px;
+font-weight: 400;
+margin-bottom: 10px;
+color: var(–text);
+}
+.success-wrap p {
+color: var(–muted);
+font-size: 14px;
+font-weight: 300;
+line-height: 1.8;
+margin-bottom: 28px;
+}
+
+.summary {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 3px;
+padding: 18px 20px;
+text-align: left;
+}
+.summary-head {
+font-size: 10px;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 14px;
+font-weight: 500;
+}
+.s-row {
+display: flex;
+justify-content: space-between;
+align-items: baseline;
+padding: 7px 0;
+border-bottom: 1px solid var(–border);
+gap: 12px;
+font-size: 14px;
+}
+.s-row:last-child { border-bottom: none; }
+.s-key { color: var(–muted); font-size: 12px; flex-shrink: 0; font-weight: 300; }
+.s-val { font-weight: 400; text-align: right; color: var(–text); }
+
+.btn-reset {
+margin-top: 20px;
+background: transparent;
+border: 1px solid rgba(196,160,100,0.3);
+color: var(–gold);
+padding: 10px 24px;
+font-family: var(–sans);
+font-size: 12px;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+cursor: pointer;
+border-radius: 3px;
+transition: all 0.2s;
+}
+.btn-reset:hover { background: rgba(196,160,100,0.07); }
+
+@media (max-width: 420px) {
+.card { padding: 24px 16px; }
+.row { grid-template-columns: 1fr; gap: 0; }
+.arabic-title { font-size: 36px; }
+}
+</style>
+
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <div class="arabic-title">الإنسانية</div>
+    <div class="center-sub">Лингвистический центр</div>
+    <div class="center-main">«Аль-Инсания»</div>
+    <div class="tagline">Арабский и английский язык</div>
+  </div>
+
+  <div class="ornament"><span>◆</span></div>
+
+  <div class="card">
+    <div class="steps">
+      <div class="step-dot active" id="dot-1"></div>
+      <div class="step-dot" id="dot-2"></div>
+      <div class="step-dot" id="dot-3"></div>
+    </div>
+
+```
+<!-- Шаг 1 -->
+<div class="step active" id="step-1">
+  <div class="step-title">Какой язык<br>вас интересует?</div>
+  <div class="step-sub">Шаг 1 из 3 — выберите направление</div>
+
+  <div class="lang-cards">
+    <div class="lang-card arabic">
+      <input type="radio" name="lang" id="lang-ar" value="Арабский">
+      <label for="lang-ar">
+        <span class="emoji">🌙</span>
+        <span class="l-name">Арабский</span>
+        <span class="l-sub">عربي</span>
+      </label>
+    </div>
+    <div class="lang-card english">
+      <input type="radio" name="lang" id="lang-en" value="Английский">
+      <label for="lang-en">
+        <span class="emoji">🌍</span>
+        <span class="l-name">Английский</span>
+        <span class="l-sub">English</span>
+      </label>
+    </div>
+  </div>
+
+  <label>Ваш уровень</label>
+  <div class="level-cards">
+    <div class="lvl-card">
+      <input type="radio" name="level" id="lvl-0" value="С нуля">
+      <label for="lvl-0"><span class="lvl-tag">Beginner</span>С нуля</label>
+    </div>
+    <div class="lvl-card">
+      <input type="radio" name="level" id="lvl-elem" value="Начальный (A1–A2)">
+      <label for="lvl-elem"><span class="lvl-tag">Elementary</span>Начальный</label>
+    </div>
+    <div class="lvl-card">
+      <input type="radio" name="level" id="lvl-mid" value="Средний (B1–B2)">
+      <label for="lvl-mid"><span class="lvl-tag">Intermediate</span>Средний</label>
+    </div>
+    <div class="lvl-card">
+      <input type="radio" name="level" id="lvl-adv" value="Продвинутый (C1+)">
+      <label for="lvl-adv"><span class="lvl-tag">Advanced</span>Продвинутый</label>
+    </div>
+  </div>
+
+  <label>Формат занятий</label>
+  <div class="format-cards">
+    <div class="fmt-card">
+      <input type="radio" name="format" id="fmt-offline" value="Очно">
+      <label for="fmt-offline"><span class="f-icon">🏫</span> Очно</label>
+    </div>
+    <div class="fmt-card">
+      <input type="radio" name="format" id="fmt-online" value="Онлайн">
+      <label for="fmt-online"><span class="f-icon">💻</span> Онлайн</label>
+    </div>
+  </div>
+
+  <p class="error-msg" id="err-1">Пожалуйста, выберите язык, уровень и формат</p>
+  <div class="btn-row">
+    <button class="btn-next" onclick="goTo(2)">Далее →</button>
+  </div>
+</div>
+
+<!-- Шаг 2 -->
+<div class="step" id="step-2">
+  <div class="step-title">Как вас<br>зовут?</div>
+  <div class="step-sub">Шаг 2 из 3 — контактные данные</div>
+
+  <div class="field">
+    <label for="name">Имя</label>
+    <input type="text" id="name" placeholder="Ваше имя">
+  </div>
+  <div class="field">
+    <label for="phone">Номер телефона</label>
+    <input type="tel" id="phone" placeholder="+7 (___) ___-__-__">
+  </div>
+  <div class="field">
+    <label for="age">Возраст <span style="letter-spacing:0;font-weight:300;text-transform:none">(необязательно)</span></label>
+    <select id="age">
+      <option value="">— выберите —</option>
+      <option>До 12 лет</option>
+      <option>13–17 лет</option>
+      <option>18–25 лет</option>
+      <option>26–40 лет</option>
+      <option>Старше 40</option>
+    </select>
+  </div>
+
+  <p class="error-msg" id="err-2">Пожалуйста, укажите имя и телефон</p>
+  <div class="btn-row">
+    <button class="btn-back" onclick="goTo(1)">←</button>
+    <button class="btn-next" onclick="goTo(3)">Далее →</button>
+  </div>
+</div>
+
+<!-- Шаг 3 -->
+<div class="step" id="step-3">
+  <div class="step-title">Ваша цель<br>в обучении?</div>
+  <div class="step-sub">Шаг 3 из 3 — поможет подобрать программу</div>
+
+  <div class="field">
+    <label>Тип занятия</label>
+    <div class="format-cards">
+      <div class="fmt-card">
+        <input type="radio" name="type" id="type-trial" value="Пробный урок">
+        <label for="type-trial"><span class="f-icon">✨</span> Пробный урок</label>
+      </div>
+      <div class="fmt-card">
+        <input type="radio" name="type" id="type-course" value="Курс">
+        <label for="type-course"><span class="f-icon">📚</span> Курс</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="goal">Расскажите о цели <span style="letter-spacing:0;font-weight:300;text-transform:none">(необязательно)</span></label>
+    <textarea id="goal" placeholder="Например: читать Коран, переезд, работа, учёба..."></textarea>
+  </div>
+
+  <p class="error-msg" id="err-3">Пожалуйста, выберите тип занятия</p>
+  <div class="btn-row">
+    <button class="btn-back" onclick="goTo(2)">←</button>
+    <button class="btn-next" id="submit-btn" onclick="submit()">Отправить заявку</button>
+  </div>
+</div>
+
+<!-- Успех -->
+<div class="step" id="step-success">
+  <div class="success-wrap">
+    <div class="success-ring">✓</div>
+    <h2>Заявка принята!</h2>
+    <p>Спасибо! Мы получили вашу заявку<br>и свяжемся с вами в ближайшее время.</p>
+    <div class="summary">
+      <div class="summary-head">Данные заявки</div>
+      <div id="summary-body"></div>
+    </div>
+    <button class="btn-reset" onclick="resetForm()">← Новая заявка</button>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
+<script>
+const TG_TOKEN = '8890605862:AAFav1jzf0w3matMY4CbaiEyc2nBShnjahc';
+const TG_CHAT  = '8201023640';
+
+async function sendToTelegram(text) {
+  try {
+    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: 'HTML' })
+    });
+  } catch(e) { console.error('TG error', e); }
+}
+
+let current = 1;
+
+function goTo(n) {
+  if (n > 1 && current === 1) {
+    const lang  = document.querySelector('input[name="lang"]:checked');
+    const level = document.querySelector('input[name="level"]:checked');
+    const fmt   = document.querySelector('input[name="format"]:checked');
+    if (!lang || !level || !fmt) { document.getElementById('err-1').style.display = 'block'; return; }
+    document.getElementById('err-1').style.display = 'none';
+  }
+  if (n > 2 && current === 2) {
+    const name  = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    if (!name || !phone) { document.getElementById('err-2').style.display = 'block'; return; }
+    document.getElementById('err-2').style.display = 'none';
+  }
+  document.getElementById('step-' + current).classList.remove('active');
+  current = n;
+  document.getElementById('step-' + current).classList.add('active');
+  updateDots();
+}
+
+function updateDots() {
+  for (let i = 1; i <= 3; i++) {
+    const d = document.getElementById('dot-' + i);
+    d.classList.remove('active', 'done');
+    if (i === current) d.classList.add('active');
+    else if (i < current) d.classList.add('done');
+  }
+}
+
+async function submit() {
+  const type = document.querySelector('input[name="type"]:checked');
+  if (!type) { document.getElementById('err-3').style.display = 'block'; return; }
+  document.getElementById('err-3').style.display = 'none';
+
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Отправляем...';
+  btn.disabled = true;
+
+  const lang  = document.querySelector('input[name="lang"]:checked').value;
+  const level = document.querySelector('input[name="level"]:checked').value;
+  const fmt   = document.querySelector('input[name="format"]:checked').value;
+  const name  = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const age   = document.getElementById('age').value;
+  const goal  = document.getElementById('goal').value.trim();
+
+  const rows = [
+    { k: 'Тип',     v: type.value },
+    { k: 'Язык',    v: lang },
+    { k: 'Уровень', v: level },
+    { k: 'Формат',  v: fmt },
+    { k: 'Имя',     v: name },
+    { k: 'Телефон', v: phone },
+  ];
+  if (age)  rows.push({ k: 'Возраст', v: age });
+  if (goal) rows.push({ k: 'Цель',    v: goal });
+
+  const msg = '📋 <b>Новая заявка — Аль-Инсания</b>\n\n' +
+    rows.map(r => `<b>${r.k}:</b> ${r.v}`).join('\n');
+
+  await sendToTelegram(msg);
+
+  document.getElementById('summary-body').innerHTML =
+    rows.map(r => `<div class="s-row"><span class="s-key">${r.k}</span><span class="s-val">${r.v}</span></div>`).join('');
+
+  btn.textContent = 'Отправить заявку';
+  btn.disabled = false;
+
+  document.getElementById('step-3').classList.remove('active');
+  document.getElementById('step-success').classList.add('active');
+  document.querySelector('.steps').style.display = 'none';
+}
+
+function resetForm() {
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  ['name','phone','goal'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('age').value = '';
+  document.getElementById('step-success').classList.remove('active');
+  document.querySelector('.steps').style.display = 'flex';
+  current = 1;
+  document.getElementById('step-1').classList.add('active');
+  updateDots();
+}
+</script>
+
+</body>
+</html>
