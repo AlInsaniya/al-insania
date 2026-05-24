@@ -721,6 +721,9 @@ function goTo(n) {
   updateDots();
 }
 
+// Генерируем капчу при загрузке страницы
+document.addEventListener('DOMContentLoaded', generateCaptcha);
+
 function updateDots() {
   for (let i = 1; i <= 3; i++) {
     const d = document.getElementById('dot-' + i);
