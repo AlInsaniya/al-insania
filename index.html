@@ -175,6 +175,7 @@ body::after {
   margin-bottom: 4px;
   line-height: 1.3;
   color: var(--text);
+  quotes: none;
 }
 .step-sub {
   font-size: 13px;
@@ -601,7 +602,7 @@ textarea { resize: none; min-height: 80px; line-height: 1.6; }
   </div>
   <div class="field">
     <label for="phone">Номер телефона</label>
-    <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" oninput="phoneMask(this)" maxlength="18">
+    <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" maxlength="18">
   </div>
   <div class="field">
     <label for="age">Возраст <span style="letter-spacing:0;font-weight:300;text-transform:none">(необязательно)</span></label>
@@ -694,12 +695,21 @@ function phoneMask(input) {
   if (v.startsWith('8')) v = '7' + v.slice(1);
   if (!v.startsWith('7')) v = '7' + v;
   v = v.slice(0, 11);
+  if (v.length <= 1) { input.value = '+7'; return; }
   let out = '+7';
-  if (v.length > 1) out += ' (' + v.slice(1, 4);
-  if (v.length >= 4) out += ') ' + v.slice(4, 7);
-  if (v.length >= 7) out += '-' + v.slice(7, 9);
+  if (v.length > 1) out += ' (' + v.slice(1, Math.min(4, v.length));
+  if (v.length >= 4) out += ') ' + v.slice(4, Math.min(7, v.length));
+  if (v.length >= 7) out += '-' + v.slice(7, Math.min(9, v.length));
   if (v.length >= 9) out += '-' + v.slice(9, 11);
   input.value = out;
+}
+
+function phoneKeydown(input, e) {
+  // Разрешаем стирать только цифры, не трогая +7
+  if (e.key === 'Backspace') {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length <= 1) { e.preventDefault(); input.value = '+7'; }
+  }
 }
 
 
@@ -729,7 +739,7 @@ function goTo(n) {
     let ok = true;
     if (!name) { document.getElementById('err-2').style.display = 'block'; ok = false; }
     else document.getElementById('err-2').style.display = 'none';
-    if (phone.length < 18) { document.getElementById('err-phone').style.display = 'block'; ok = false; }
+    if (phone.replace(/\D/g, '').length < 10) { document.getElementById('err-phone').style.display = 'block'; ok = false; }
     else document.getElementById('err-phone').style.display = 'none';
     if (!ok) return;
   }
